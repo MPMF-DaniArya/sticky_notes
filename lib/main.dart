@@ -1,6 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:sticky_notes/screens/login/login_screen.dart';
+import 'package:sticky_notes/service/base_service.dart';
+import 'package:sticky_notes/service/service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -9,9 +13,15 @@ void main() async {
 
   final client = Dio(BaseOptions(
       baseUrl: 'https://humic.xtrahera.com',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
       connectTimeout: const Duration(seconds: 60),
       receiveTimeout: const Duration(seconds: 60)));
-
+  
+  BaseService.initialize(client);
+  Service.setup(client);
 
   runApp(const MyApp());
 }
@@ -21,13 +31,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Latihan',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
-        useMaterial3: true,
-      ),
-      home:
-    );
+    return GetMaterialApp(
+        title: 'Latihan',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
+          useMaterial3: true,
+        ),
+        home: const LoginScreen());
   }
 }

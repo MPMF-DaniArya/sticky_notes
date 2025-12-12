@@ -2,12 +2,12 @@ import 'package:flutter/cupertino.dart';
 
 class LoginState {
   GlobalKey<FormState>? formKey;
-  TextEditingController? enteredEmail;
-  TextEditingController? enteredPassword;
+  TextEditingController? emailController;
+  TextEditingController? passwordController;
 
   LoginState() {
     formKey = GlobalKey<FormState>();
-    enteredEmail = TextEditingController();
-    enteredPassword = TextEditingController();
+    emailController = TextEditingController();
+    passwordController = TextEditingController();
   }
 }

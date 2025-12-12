@@ -10,6 +10,53 @@ class LoginScreen extends StatelessWidget {
     final logic = Get.put(LoginLogic());
     final state = Get.find<LoginLogic>().state;
 
-    return const Placeholder();
+    return Scaffold(
+      body: Padding(
+        padding: const EdgeInsetsGeometry.all(32),
+        child: Center(
+          child: Form(
+            key: state.formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextFormField(
+                  controller: state.emailController,
+                  decoration: const InputDecoration(
+                    labelText: 'Email',
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Inputan tidak valid';
+                    }
+                    return null;
+                  },
+                ),
+                TextFormField(
+                  controller: state.passwordController,
+                  decoration: const InputDecoration(
+                    labelText: 'Password',
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Inputan tidak valid';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(
+                  height: 18,
+                ),
+                GetBuilder<LoginLogic>(
+                  builder: (logic) {
+                    return ElevatedButton(
+                        onPressed: logic.doLogin, child: const Text('Login'));
+                  },
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
