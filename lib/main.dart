@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:sticky_notes/screens/login/login_screen.dart';
+import 'package:sticky_notes/screens/splash/splash_screen.dart';
 import 'package:sticky_notes/service/base_service.dart';
 import 'package:sticky_notes/service/service.dart';
 
@@ -37,6 +38,6 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
           useMaterial3: true,
         ),
-        home: const LoginScreen());
+        home: const SplashScreen());
   }
 }

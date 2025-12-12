@@ -2,9 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sticky_notes/screens/login/login_logic.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final logic = Get.put(LoginLogic());
@@ -12,7 +17,7 @@ class LoginScreen extends StatelessWidget {
 
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsetsGeometry.all(32),
+        padding: const EdgeInsets.all(32),
         child: Center(
           child: Form(
             key: state.formKey,
