@@ -28,7 +28,7 @@ class LocalStorage {
     box.remove('user_id');
     box.remove('user_email');
     box.remove('user_name');
-    box.remove('user_login');
+    box.write('user_login', false);
   }
 
   Future<String?> getUserToken() async {

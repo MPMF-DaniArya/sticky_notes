@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sticky_notes/core/exceptions/app_exception.dart';
 import 'package:sticky_notes/models/api/login_response.dart';
 import 'package:sticky_notes/screens/login/login_state.dart';
 import 'package:sticky_notes/screens/notes/notes_screen.dart';
 import 'package:sticky_notes/service/login_service.dart';
 import 'package:sticky_notes/service/service.dart';
-import 'package:sticky_notes/utils/app_exception.dart';
 
 class LoginLogic extends GetxController {
   final LoginState state = LoginState();

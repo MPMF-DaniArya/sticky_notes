@@ -44,16 +44,20 @@ class NotesScreen extends StatelessWidget {
               );
             }
 
-            return ListView.builder(
-              itemCount: state.dataNote!.listNotes!.length,
-              itemBuilder: (context, index) {
-                final note = state.dataNote!.listNotes![index];
+            return GetBuilder<NotesLogic>(
+              builder: (logic) {
+                return ListView.builder(
+                  itemCount: state.dataNote!.listNotes!.length,
+                  itemBuilder: (context, index) {
+                    final note = state.dataNote!.listNotes![index];
 
-                return Center(
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 18),
-                    child: StickyNote(note: note),
-                  ),
+                    return Center(
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 18),
+                        child: StickyNote(note: note),
+                      ),
+                    );
+                  },
                 );
               },
             );

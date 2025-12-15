@@ -1,7 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:sticky_notes/models/api/note_response.dart';
+import 'package:sticky_notes/screens/login/login_logic.dart';
 import 'package:sticky_notes/screens/login/widgets/reaction_chip.dart';
+import 'package:sticky_notes/screens/notes/notes_logic.dart';
 
 class StickyNote extends StatelessWidget {
   final NotesData note;
@@ -24,6 +27,9 @@ class StickyNote extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final logic = Get.put(LoginLogic());
+    final state = Get.find<LoginLogic>().state;
+
     final textTheme = Theme.of(context).textTheme;
     final noteColor = _parseColor(note.color!);
 
@@ -46,38 +52,42 @@ class StickyNote extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 18),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Text(
-                    note.title!,
-                    style: textTheme.titleMedium!.copyWith(
-                      fontWeight: FontWeight.bold,
+            GetBuilder<NotesLogic>(builder: (logic) {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Text(
+                      note.title!,
+                      style: textTheme.titleMedium!.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.edit,
-                          color: Colors.green,
-                          size: 25,
-                        )),
-                    IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.delete,
-                          color: Colors.red,
-                          size: 25,
-                        ))
-                  ],
-                )
-              ],
-            ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      IconButton(
+                          onPressed: () {},
+                          icon: const Icon(
+                            Icons.edit,
+                            color: Colors.green,
+                            size: 25,
+                          )),
+                      IconButton(
+                          onPressed: () {
+                            logic.deleteNote(id: note.id!);
+                          },
+                          icon: const Icon(
+                            Icons.delete,
+                            color: Colors.red,
+                            size: 25,
+                          ))
+                    ],
+                  )
+                ],
+              );
+            }),
             const SizedBox(height: 18),
             if (note.image != null)
               CachedNetworkImage(

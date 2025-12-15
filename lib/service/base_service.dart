@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:sticky_notes/core/exceptions/app_exception.dart';
 import 'package:sticky_notes/models/generator/generator.dart' as models;
 
 import 'package:dio/dio.dart';
-import 'package:sticky_notes/utils/app_exception.dart';
 
 class ServiceLoggerInterceptor extends InterceptorsWrapper {
   JsonEncoder encoder = const JsonEncoder.withIndent(' ');
@@ -52,7 +52,7 @@ abstract class BaseService {
 
       return models.ModelGenerator.resolve<T>(json);
     } on DioException catch (e) {
-      if (e.response != null){
+      if (e.response != null) {
         _processResponse(e.response!);
       }
       throw AppException('Koneksi bermasalah: ${e.type}');
@@ -63,10 +63,46 @@ abstract class BaseService {
   }
 
   Future<T?> get<T>(String url, {Map<String, dynamic>? queryParameters}) async {
-    final response = await _wrapRequest(
-        () => client.get(url, queryParameters: queryParameters));
+    try {
+      final response = await _wrapRequest(
+          () => client.get(url, queryParameters: queryParameters));
 
-    return models.ModelGenerator.resolve(response.data);
+      var json = _processResponse(response);
+
+      return models.ModelGenerator.resolve<T>(json);
+    } on DioException catch (e) {
+      if (e.response != null) {
+        _processResponse(e.response!);
+      }
+      throw AppException('Koneksi bermasalah: ${e.type}');
+    } catch (e) {
+      rethrow;
+    }
+    return null;
+  }
+
+  Future<T?> delete<T>(String url,
+      {Map<String, dynamic>? queryParameters}) async {
+    try {
+      final response = await _wrapRequest(
+          () => client.delete(url, queryParameters: queryParameters));
+
+      var json = _processResponse(response);
+
+      if (T == bool){
+        return true as T;
+      }
+
+      return models.ModelGenerator.resolve<T>(json);
+    } on DioException catch (e) {
+      if (e.response != null) {
+        _processResponse(e.response!);
+      }
+      throw AppException('Koneksi bermasalah: ${e.type}');
+    } catch (e) {
+      rethrow;
+    }
+    return null;
   }
 
   _wrapRequest(request, {int retryCount = 3}) async {
