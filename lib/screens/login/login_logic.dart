@@ -1,16 +1,14 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:sticky_notes/models/api/login_response.dart';
 import 'package:sticky_notes/screens/login/login_state.dart';
-import 'package:sticky_notes/screens/splash/splash_state.dart';
-import 'package:sticky_notes/screens/test/kalau_login_screen.dart';
+import 'package:sticky_notes/screens/notes/notes_screen.dart';
 import 'package:sticky_notes/service/login_service.dart';
 import 'package:sticky_notes/service/service.dart';
+import 'package:sticky_notes/utils/app_exception.dart';
 
 class LoginLogic extends GetxController {
-  final box = GetStorage();
   final LoginState state = LoginState();
-  final SplashState splashState = SplashState();
   var isLoading = false.obs;
 
   void doLogin() async {
@@ -22,6 +20,8 @@ class LoginLogic extends GetxController {
 
     state.formKey!.currentState!.save();
 
+    if (isLoading.value) return;
+
     try {
       isLoading.value = true;
 
@@ -30,25 +30,25 @@ class LoginLogic extends GetxController {
           password: state.passwordController!.text);
 
       if (result != null) {
-        splashState.localStorage?.saveCurrentUserData(
+        state.localStorage?.saveCurrentUserData(
             id: result.user!.id!,
             token: result.token!,
             email: result.user!.email!,
             name: result.user!.name!);
         await Future.delayed(Duration.zero);
+        Get.offAll(const NotesScreen());
         Get.snackbar('Sukses', 'Berhasil login');
-        Get.to(const KalauLoginScreen());
-      } else {
-        await Future.delayed(Duration.zero);
-        Get.snackbar('Info', result!.message!);
       }
-    } catch (e) {
-      print('Logic error: $e');
+    } on AppException catch (e) {
       await Future.delayed(Duration.zero);
-      Get.snackbar('Error', 'Terjadi kesalahan sistem');
+      Get.snackbar('Error', e.toString(),
+          backgroundColor: Colors.red, colorText: Colors.white);
+    } catch (e) {
+      await Future.delayed(Duration.zero);
+      print(e);
+      Get.snackbar('Error', 'Terjadi kesalahan aplikasi');
     } finally {
       isLoading.value = false;
-      update();
     }
   }
 }

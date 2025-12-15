@@ -19,45 +19,51 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Padding(
         padding: const EdgeInsets.all(32),
         child: Center(
-          child: Form(
-            key: state.formKey,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextFormField(
-                  controller: state.emailController,
-                  decoration: const InputDecoration(
-                    labelText: 'Email',
+          child: SingleChildScrollView(
+            child: Form(
+              key: state.formKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextFormField(
+                    controller: state.emailController,
+                    decoration: const InputDecoration(
+                      labelText: 'Email',
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Inputan tidak valid';
+                      }
+                      return null;
+                    },
                   ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Inputan tidak valid';
-                    }
-                    return null;
-                  },
-                ),
-                TextFormField(
-                  controller: state.passwordController,
-                  decoration: const InputDecoration(
-                    labelText: 'Password',
+                  TextFormField(
+                    controller: state.passwordController,
+                    decoration: const InputDecoration(
+                      labelText: 'Password',
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Inputan tidak valid';
+                      }
+                      return null;
+                    },
                   ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Inputan tidak valid';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(
-                  height: 18,
-                ),
-                GetBuilder<LoginLogic>(
-                  builder: (logic) {
-                    return ElevatedButton(
-                        onPressed: logic.doLogin, child: const Text('Login'));
-                  },
-                )
-              ],
+                  const SizedBox(
+                    height: 18,
+                  ),
+                  Obx(
+                    () {
+                      if (logic.isLoading.value) {
+                        return const CircularProgressIndicator();
+                      }
+
+                      return ElevatedButton(
+                          onPressed: logic.doLogin, child: const Text('Login'));
+                    },
+                  )
+                ],
+              ),
             ),
           ),
         ),

@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:dio/io.dart';
 import 'package:sticky_notes/service/base_service.dart';
 import 'package:sticky_notes/service/login_service.dart';
+import 'package:sticky_notes/service/note_service.dart';
 
 class Service {
   Dio? client;
@@ -22,7 +23,10 @@ class Service {
   }
 
   Map<Type, BaseService> get classes {
-    return {LoginService: LoginService.instance};
+    return {
+      LoginService: LoginService.instance,
+      NoteService: NoteService.instance
+    };
   }
 
   static T? resolve<T extends BaseService?>() {
